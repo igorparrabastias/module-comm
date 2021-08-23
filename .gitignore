@@ -1,0 +1,8 @@
+node_modules
+dist
+*.log
+.idea
+coverage
+.nyc_output
+package-lock.json
+yarn.lock

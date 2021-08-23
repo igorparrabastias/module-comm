@@ -1,0 +1,22 @@
+{
+  "name": "@nomikos/module-comm",
+  "version": "1.0.9",
+  "description": "Servicios externos de email, amqp",
+  "main": "index.js",
+  "prettier": "@nomikos/prettierrc",
+  "scripts": {
+    "test": "NODE_ENV=test jest",
+    "lint": "eslint --fix src && prettier --write \"src/**/*.js\""
+  },
+  "author": "Igor Parra B.",
+  "license": "ISC",
+  "dependencies": {
+    "amqp-connection-manager": "^3.1.1",
+    "amqplib": "^0.5.5",
+    "async": "^3.2.0",
+    "awilix": "^4.2.6",
+    "nodemailer": "^6.6.3",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "yenv": "^2.1.1"
+  }
+}
