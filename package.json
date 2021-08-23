@@ -2,14 +2,24 @@
   "name": "@nomikos/module-comm",
   "version": "1.0.9",
   "description": "Servicios externos de email, amqp",
+  "author": {
+    "name": "Igor Parra Bastias",
+    "email": "usuario3@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NomikOS/module-comm"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/nomikos"
+  },
+  "license": "UNLICENSED",
   "main": "index.js",
   "prettier": "@nomikos/prettierrc",
   "scripts": {
     "test": "NODE_ENV=test jest",
     "lint": "eslint --fix src && prettier --write \"src/**/*.js\""
   },
-  "author": "Igor Parra B.",
-  "license": "ISC",
   "dependencies": {
     "amqp-connection-manager": "^3.1.1",
     "amqplib": "^0.5.5",
