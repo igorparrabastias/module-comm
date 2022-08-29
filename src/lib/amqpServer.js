@@ -2,7 +2,6 @@ const { env } = require('./env')
 const amqp = require('amqp-connection-manager')
 const amqpHost = env['amqp-host']
 
-// No se puede exportar en commonJs (es null)
 let amqpConn = null
 
 function amqpClientConnect(loggerRoot) {

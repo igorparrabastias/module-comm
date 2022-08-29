@@ -32,26 +32,14 @@ module.exports = {
 
               await new Promise((resolve) => {
                 ch.assertQueue(queueName, options)
-                  .then(async () => {
+                  .then(() => {
                     if (
                       options.arguments &&
-                      options.arguments['x-dead-letter-routing-key'] &&
-                      options.arguments['x-dead-letter-exchange']
+                      options.arguments['x-dead-letter-routing-key']
                     ) {
-                      const rk = options.arguments['x-dead-letter-routing-key']
-                      const exc = options.arguments['x-dead-letter-exchange']
-
-                      loggerRoot.debug(`Creando dead exchange: ${exc}.dl`)
-                      await ch.assertExchange(exc, 'direct', { durable: true })
-
                       // Crear su respectivo dead-letter
                       loggerRoot.debug(`Creando dead letter: ${queueName}.dl`)
-                      await ch.assertQueue(`${queueName}.dl`, {
-                        durable: true
-                      })
-
-                      loggerRoot.debug(`Binding dead letter: ${queueName}.dl`)
-                      await ch.bindQueue(rk, exc, rk)
+                      ch.assertQueue(`${queueName}.dl`, { durable: true })
                     }
                   })
                   .then(() => {
