@@ -1,6 +1,6 @@
 {
   "name": "@nomikos/module-comm",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Servicios externos de email, amqp",
   "author": {
     "name": "Igor Parra Bastias",
@@ -11,7 +11,7 @@
     "url": "https://github.com/NomikOS/module-comm"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/nomikos"
+    "registry": "https://npm.pkg.github.com/NomikOS"
   },
   "license": "UNLICENSED",
   "main": "index.js",

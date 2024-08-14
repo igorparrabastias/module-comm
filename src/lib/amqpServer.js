@@ -32,6 +32,15 @@ function amqpClientConnect(loggerRoot) {
       resolve(amqpConn)
     })
 
+    amqpConn.on('error', (err) => {
+        console.log('********* Error en la conexión:', err.message)
+        console.error('********* Error en la conexión:', err.message)
+    })
+
+    amqpConn.on('close', () => {
+        console.log('********* La conexión se ha cerrado.')
+    })
+
     // Emitted whenever we disconnect from a broker.
     amqpConn.on('disconnect', function (params) {
       const error = params.err
