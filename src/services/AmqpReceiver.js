@@ -27,10 +27,11 @@ module.exports = {
           Object.keys(colas).map(async (queueName) => {
             const cola = colas[queueName];
             const options = cola.options;
+            const dlOptions = cola.dlOptions ?? { durable: true };
             const prefetch = cola.prefetch || 1;
+            // console.log(`dlOptions`, dlOptions)
 
             try {
-              // Uso correcto de promesas sin envolver en una nueva promesa innecesariamente
               await ch.assertQueue(queueName, options);
               if (
                 options.arguments &&
@@ -44,7 +45,7 @@ module.exports = {
                 await ch.assertExchange(exc, "direct", { durable: true });
 
                 loggerRoot.debug(`Creando dead letter: ${queueName}.dl`);
-                await ch.assertQueue(`${queueName}.dl`, { durable: true });
+                await ch.assertQueue(`${queueName}.dl`, dlOptions);
 
                 loggerRoot.debug(`Binding dead letter: ${queueName}.dl`);
                 await ch.bindQueue(`${queueName}.dl`, exc, rk);
