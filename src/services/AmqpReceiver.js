@@ -22,14 +22,14 @@ module.exports = {
       setup: async (ch) => {
         loggerRoot.debug("CREANDO CHANNEL PARA CONSUMIR");
 
-        try {
-          // Corregido para manejar y devolver promesas correctamente
-          return Promise.all(
-            Object.keys(colas).map(async (queueName) => {
-              const cola = colas[queueName];
-              const options = cola.options;
-              const prefetch = cola.prefetch || 1;
+        // Corregido para manejar y devolver promesas correctamente
+        return Promise.all(
+          Object.keys(colas).map(async (queueName) => {
+            const cola = colas[queueName];
+            const options = cola.options;
+            const prefetch = cola.prefetch || 1;
 
+            try {
               // Uso correcto de promesas sin envolver en una nueva promesa innecesariamente
               await ch.assertQueue(queueName, options);
               if (
@@ -53,11 +53,13 @@ module.exports = {
               ch.prefetch(prefetch);
               amqpReceiverAdapter(ch, queueName, cola);
               loggerRoot.debug(`COLA CONSUMO ${queueName}`);
-            })
-          ); // end Promise.all
-        } catch (error) {
-          loggerRoot.error(`Error al configurar las colas: ${error.message}`);
-        }
+            } catch (error) {
+              loggerRoot.error(
+                `Error al configurar las colas: ${error.message}`
+              );
+            }
+          })
+        ); // end Promise.all
       },
     });
 
