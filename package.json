@@ -1,6 +1,6 @@
 {
   "name": "@nomikos/module-comm",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Servicios externos de email, amqp",
   "author": {
     "name": "Igor Parra Bastias",

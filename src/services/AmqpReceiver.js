@@ -22,38 +22,42 @@ module.exports = {
       setup: async (ch) => {
         loggerRoot.debug("CREANDO CHANNEL PARA CONSUMIR");
 
-        // Corregido para manejar y devolver promesas correctamente
-        return Promise.all(
-          Object.keys(colas).map(async (queueName) => {
-            const cola = colas[queueName];
-            const options = cola.options;
-            const prefetch = cola.prefetch || 1;
+        try {
+          // Corregido para manejar y devolver promesas correctamente
+          return Promise.all(
+            Object.keys(colas).map(async (queueName) => {
+              const cola = colas[queueName];
+              const options = cola.options;
+              const prefetch = cola.prefetch || 1;
 
-            // Uso correcto de promesas sin envolver en una nueva promesa innecesariamente
-            await ch.assertQueue(queueName, options);
-            if (
-              options.arguments &&
-              options.arguments["x-dead-letter-routing-key"] &&
-              options.arguments["x-dead-letter-exchange"]
-            ) {
-              const rk = options.arguments["x-dead-letter-routing-key"];
-              const exc = options.arguments["x-dead-letter-exchange"];
+              // Uso correcto de promesas sin envolver en una nueva promesa innecesariamente
+              await ch.assertQueue(queueName, options);
+              if (
+                options.arguments &&
+                options.arguments["x-dead-letter-routing-key"] &&
+                options.arguments["x-dead-letter-exchange"]
+              ) {
+                const rk = options.arguments["x-dead-letter-routing-key"];
+                const exc = options.arguments["x-dead-letter-exchange"];
 
-              loggerRoot.debug(`Creando dead exchange: ${exc}.dl`);
-              await ch.assertExchange(exc, "direct", { durable: true });
+                loggerRoot.debug(`Creando dead exchange: ${exc}.dl`);
+                await ch.assertExchange(exc, "direct", { durable: true });
 
-              loggerRoot.debug(`Creando dead letter: ${queueName}.dl`);
-              await ch.assertQueue(`${queueName}.dl`, { durable: true });
+                loggerRoot.debug(`Creando dead letter: ${queueName}.dl`);
+                await ch.assertQueue(`${queueName}.dl`, { durable: true });
 
-              loggerRoot.debug(`Binding dead letter: ${queueName}.dl`);
-              await ch.bindQueue(`${queueName}.dl`, exc, rk);
-            }
+                loggerRoot.debug(`Binding dead letter: ${queueName}.dl`);
+                await ch.bindQueue(`${queueName}.dl`, exc, rk);
+              }
 
-            ch.prefetch(prefetch);
-            amqpReceiverAdapter(ch, queueName, cola);
-            loggerRoot.debug(`COLA CONSUMO ${queueName}`);
-          })
-        ); // end Promise.all
+              ch.prefetch(prefetch);
+              amqpReceiverAdapter(ch, queueName, cola);
+              loggerRoot.debug(`COLA CONSUMO ${queueName}`);
+            })
+          ); // end Promise.all
+        } catch (error) {
+          loggerRoot.error(`Error al configurar las colas: ${error.message}`);
+        }
       },
     });
 
